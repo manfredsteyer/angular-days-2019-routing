@@ -4,6 +4,8 @@ import {FlightEditComponent} from './flight-edit/flight-edit.component';
 import {FlightSearchComponent} from './flight-search/flight-search.component';
 import {PassengerSearchComponent} from './passenger-search/passenger-search.component';
 import { AuthGuard } from '../shared/auth/auth.guard';
+import { ExitGuard } from '../shared/exit/exit.guard';
+import { FlightResolver } from './flight-edit/flight.resolver';
 
 export const FLIGHT_BOOKING_ROUTES: Routes = [
 
@@ -12,13 +14,15 @@ export const FLIGHT_BOOKING_ROUTES: Routes = [
 
       // },
       
+      // flight-booking/flight-booking/flight-search
+
       // Protected Routes
       {
         path: '',
         canActivate: [AuthGuard],
         children: [
           {
-            path: 'flight-booking',
+            path: '',
             component: FlightBookingComponent,
             children: [
               {
@@ -32,6 +36,10 @@ export const FLIGHT_BOOKING_ROUTES: Routes = [
               {
                 path: 'flight-edit/:id', //;showDetail=true <-- do not configure matrix parameters
                 component: FlightEditComponent,
+                canDeactivate: [ExitGuard],
+                resolve: {
+                  'flight': FlightResolver
+                }
               }
             ]
           }
